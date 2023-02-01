@@ -1,7 +1,6 @@
 package com.example.service;
 
 import com.example.dto.UserDto;
-import com.example.exception.ResourceNotFoundException;
 import com.example.model.User;
 import com.example.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +37,13 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void updateUsers(Long id, UserDto userDTO) {
+    public void updateUsers(Long id, UserDto userDTO) throws Exception {
         userRepository.findById(id)
                 .map(s -> {
                     s.setName(userDTO.getName());
                     s.setSurname(userDTO.getSurname());
                     return userRepository.save(s);
                 })
-                .orElseThrow(() -> new ResourceNotFoundException("Student with id " + id + " not found"));
+                .orElseThrow(() -> new Exception("Student with id " + id + " not found"));
     }
 }

@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDto {
+public class RegisterDto {
+    private String name;
+    private String surname;
     private String email;
     private String password;
 }
