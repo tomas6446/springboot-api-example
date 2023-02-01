@@ -1,4 +1,4 @@
-package com.grade.model;
+package com.example.model;
 
 
 import lombok.Data;
@@ -7,9 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * @author Tomas Kozakas
+ */
 @Data
 @Entity
-public class Student {
+public class User {
     @Id
     @GeneratedValue
     private Long id;
