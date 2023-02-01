@@ -1,9 +1,11 @@
 package com.example.config;
 
+import com.example.repository.UserDao;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,14 +20,11 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 /**
  * @author Tomas Kozakas
  */
-public class JwtAuthFilter extends OncePerRequestFilter {
-    private final UserDetailsService userDetailsService;
-    private final JwtUtils jwtUtils;
 
-    public JwtAuthFilter(UserDetailsService userDetailsService, JwtUtils jwtUtils) {
-        this.userDetailsService = userDetailsService;
-        this.jwtUtils = jwtUtils;
-    }
+@RequiredArgsConstructor
+public class JwtAuthFilter extends OncePerRequestFilter {
+    private final UserDao userDao;
+    private final JwtUtils jwtUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest,
@@ -41,8 +40,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         jwtToken = authHeader.substring(7);
         userEmail = jwtUtils.extractUsername(jwtToken);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-            final boolean isTokenValid;
+            UserDetails userDetails = userDao.findUserByEmail(userEmail);
+
             if (jwtUtils.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

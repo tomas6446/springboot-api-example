@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.UserDto;
 import com.example.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,31 +11,28 @@ import java.util.List;
  * @author Tomas Kozakas
  */
 @RestController
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
     @PostMapping("/user")
     public void addUser(@RequestBody UserDto userDTO) {
-        userService.addStudent(userDTO);
+        userService.addUser(userDTO);
     }
 
     @DeleteMapping("/user/{id}")
     public void deleteUser(@PathVariable Long id) {
-        userService.deleteStudent(id);
+        userService.deleteUser(id);
     }
 
     @GetMapping("/user")
     public List<UserDto> getAllUsers() {
-        return userService.getAllStudents();
+        return userService.getAllUsers();
     }
 
     @PutMapping("/user/{id}")
     public void updateUser(@PathVariable Long id, @RequestBody UserDto userDTO) {
-        userService.updateStudent(id, userDTO);
+        userService.updateUsers(id, userDTO);
     }
 }
 
